@@ -1,10 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const PostModel = require('../models/posts-models');
-const CommentModel = require('../models/comments-models');
-
-//get all
-router.get('/', async (req, res) => {
+const PostModel = require('./post-models');
+const CommentModel = require('../comment/comment-models');
+const getAllPosts = async (req, res) => {
     try{
         const posts = await PostModel.find();
         res.send({
@@ -19,10 +15,9 @@ router.get('/', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//get post by id
-router.get('/:postId', async (req, res) => {
+const getPostById = async (req, res) => {
     try{
         const {postId} = req.params;
         const foundPosts = await PostModel.findById(postId);
@@ -38,10 +33,9 @@ router.get('/:postId', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-// Create new post
-router.post('/', async (req, res) => {
+const createNewPost = async (req, res) => {
     try{
         const newPostData = req.body;
 
@@ -59,10 +53,9 @@ router.post('/', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//Update - edit post
-router.put('/:postId', async (req, res) => {
+const updatePost = async (req, res) => {
     try{
         const { postId } = req.params;
         const updatePostData = req.body;
@@ -81,14 +74,11 @@ router.put('/:postId', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-router.put('/:postId/like', async (req, res) => {
+const incrementLike = async (req, res) => {
     try{
-        //người dùng gửi request => tăng like thêm 1 lần
-        // tìm hiểu $inc trong mongodb
         const { postId } = req.params;
-        const updateLike = req.body;
         const incrementLike = await PostModel.updateOne(
             { _id: postId },
             { $inc: { likeCount: 1 } }
@@ -106,10 +96,9 @@ router.put('/:postId/like', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//delete post
-router.delete('/:postId', async (req, res) => {
+const deletePost = async (req, res) => {
     const {postId} = req.params;
     try {
         const deletedPost = await PostModel.findByIdAndDelete(postId);
@@ -125,9 +114,9 @@ router.delete('/:postId', async (req, res) => {
             message: err.message || 'Something went wrong'
         })
     }
-})
+}
 
-router.get('/:idPosts/comments', async (req, res) => {
+const getComment = async (req, res) => {
     try{
         const {idPosts} = req.params;
         const foundCommentByPost = await CommentModel.find({ postId: idPosts  });
@@ -143,6 +132,14 @@ router.get('/:idPosts/comments', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-module.exports = router;
+module.exports = {
+    getAllPosts,
+    getPostById,
+    createNewPost,
+    updatePost,
+    incrementLike,
+    deletePost,
+    getComment
+}

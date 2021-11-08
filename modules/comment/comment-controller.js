@@ -1,10 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const CommentModel = require('../models/comments-models');
+const CommentModel = require('./comment-models');
 
-
-//get all
-router.get('/', async (req, res) => {
+const getAllComments = async (req, res) => {
     try{
         const comments = await CommentModel.find();
         res.send({
@@ -19,31 +15,9 @@ router.get('/', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//get comment by Id Post
-// router.get('/:idPost', async (req, res) => {
-//     try{
-//         const {idPost} = req.params;
-//         const foundCommentByPost = await CommentModel.find({ postId: idPost  });
-
-//         res.send({
-//             success: 1,
-//             data: foundCommentByPost
-//         })
-//     }
-//     catch (err) {
-//         res.status(400).send({
-//             success: 0,
-//              data: null,
-//               message: err.message || 'Something went wrong'
-//             })
-//     }
-// })
-
-
-//Create Cmt
-router.post('/', async (req, res) => {
+const postComments = async (req, res) => {
     try{
         const newCommentData = req.body;
 
@@ -61,10 +35,9 @@ router.post('/', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//Edit comment
-router.put('/:commentId', async (req, res) => {
+const editComment = async (req, res) => {
     try{
         const { commentId } = req.params;
         const updateCommentData = req.body;
@@ -83,10 +56,9 @@ router.put('/:commentId', async (req, res) => {
               message: err.message || 'Something went wrong'
             })
     }
-})
+}
 
-//Delete comment
-router.delete('/:commentId', async (req, res) => {
+const deleteComment = async(req, res) => {
     const {commentId} = req.params;
     try {
         const deletedComment = await CommentModel.findByIdAndDelete(commentId);
@@ -102,6 +74,11 @@ router.delete('/:commentId', async (req, res) => {
             message: err.message || 'Something went wrong'
         })
     }
-})
+}
 
-module.exports = router;
+module.exports = {
+    getAllComments,
+    postComments,
+    editComment,
+    deleteComment
+}
