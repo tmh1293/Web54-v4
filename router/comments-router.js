@@ -22,24 +22,24 @@ router.get('/', async (req, res) => {
 })
 
 //get comment by Id Post
-router.get('/:idPost', async (req, res) => {
-    try{
-        const {idPost} = req.params;
-        const foundCommentByPost = await CommentModel.find({ postId: idPost  });
+// router.get('/:idPost', async (req, res) => {
+//     try{
+//         const {idPost} = req.params;
+//         const foundCommentByPost = await CommentModel.find({ postId: idPost  });
 
-        res.send({
-            success: 1,
-            data: foundCommentByPost
-        })
-    }
-    catch (err) {
-        res.status(400).send({
-            success: 0,
-             data: null,
-              message: err.message || 'Something went wrong'
-            })
-    }
-})
+//         res.send({
+//             success: 1,
+//             data: foundCommentByPost
+//         })
+//     }
+//     catch (err) {
+//         res.status(400).send({
+//             success: 0,
+//              data: null,
+//               message: err.message || 'Something went wrong'
+//             })
+//     }
+// })
 
 
 //Create Cmt

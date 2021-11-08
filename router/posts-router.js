@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PostModel = require('../models/posts-models');
+const CommentModel = require('../models/comments-models');
 
 //get all
 router.get('/', async (req, res) => {
@@ -123,6 +124,24 @@ router.delete('/:postId', async (req, res) => {
             data: null,
             message: err.message || 'Something went wrong'
         })
+    }
+})
+
+router.get('/:idPosts/comments', async (req, res) => {
+    try{
+        const {idPosts} = req.params;
+        const foundCommentByPost = await CommentModel.find({ postId: idPosts  });
+        res.send({
+            success: 1,
+            data: foundCommentByPost
+        })
+    }
+    catch (err) {
+        res.status(400).send({
+            success: 0,
+             data: null,
+              message: err.message || 'Something went wrong'
+            })
     }
 })
 
